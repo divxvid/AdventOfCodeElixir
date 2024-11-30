@@ -1,4 +1,4 @@
-# Advent
+# [Advent](https://github.com/ChristianAlexander/advent-generator)
 
 An [Advent of Code](https://www.adventofcode.com) boilerplate for Elixir.
 
