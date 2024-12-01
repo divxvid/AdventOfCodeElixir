@@ -1,4 +1,6 @@
 # [Advent](https://github.com/ChristianAlexander/advent-generator)
+This template is taken from: [ChristianAlexander/advent-generator](https://github.com/ChristianAlexander/advent-generator)
+Corresponding youtube video: [link](https://www.youtube.com/watch?v=gpaV4bgEG-g&pp=ygUVYWR2ZW50IG9mIGNvZGUgZWxpeGly)
 
 An [Advent of Code](https://www.adventofcode.com) boilerplate for Elixir.
 
