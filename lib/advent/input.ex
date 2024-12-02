@@ -50,10 +50,10 @@ defmodule Advent.Input do
   defp from_cache!(day, year), do: File.read!(cache_path(day, year))
 
   defp download!(day, year) do
-    {:ok, {{'HTTP/1.1', 200, 'OK'}, _, input}} =
+    {:ok, {{~c"HTTP/1.1", 200, ~c"OK"}, _, input}} =
       :httpc.request(
         :get,
-        {'https://adventofcode.com/#{year}/day/#{day}/input', headers()},
+        {~c"https://adventofcode.com/#{year}/day/#{day}/input", headers()},
         [],
         []
       )
@@ -83,5 +83,5 @@ defmodule Advent.Input do
   defp allow_network?, do: Keyword.get(config(), :allow_network?, false)
 
   defp headers,
-    do: [{'cookie', String.to_charlist("session=" <> Keyword.get(config(), :session_cookie))}]
+    do: [{~c"cookie", String.to_charlist("session=" <> Keyword.get(config(), :session_cookie))}]
 end
