@@ -37,14 +37,14 @@ defmodule Advent.Year2024.Day06 do
 
       true ->
         positions_covered = MapSet.put(positions_covered, {r, c, guard.direction})
-        # IO.inspect({guard.position, guard.direction}, label: "before obstactle")
-        obstacled_map = place_obstacle_in_path(guard, map)
-        diverted_guard = prepare_movement(guard, obstacled_map)
-
-        # IO.inspect({diverted_guard.position, diverted_guard.direction}, label: "after obstactle")
 
         has_loop? =
-          check_loop(diverted_guard, obstacled_map, positions_covered)
+          with {:ok, obstacled_map} <- place_obstacle_in_path(guard, map, positions_covered) do
+            diverted_guard = prepare_movement(guard, obstacled_map)
+            check_loop(diverted_guard, obstacled_map, positions_covered)
+          else
+            _ -> false
+          end
 
         guard = prepare_movement(guard, map)
 
@@ -57,21 +57,30 @@ defmodule Advent.Year2024.Day06 do
 
   defp place_obstacle_in_path(
          %Guard{} = guard,
-         %LabMap{rows: rows, columns: columns} = map
+         %LabMap{rows: rows, columns: columns} = map,
+         positions_covered
        ) do
     moved_guard = prepare_movement(guard, map)
     {rnew, cnew} = moved_guard.position
 
     cond do
       rnew < 1 || rnew > rows ->
-        map
+        :invalid
 
       cnew < 1 || cnew > columns ->
-        map
+        :invalid
+
+      visited?(rnew, cnew, positions_covered) ->
+        :invalid
 
       true ->
-        %LabMap{map | obstacles: MapSet.put(map.obstacles, {rnew, cnew})}
+        {:ok, %LabMap{map | obstacles: MapSet.put(map.obstacles, {rnew, cnew})}}
     end
+  end
+
+  defp visited?(x, y, covered) do
+    MapSet.member?(covered, {x, y, :up}) || MapSet.member?(covered, {x, y, :down}) ||
+      MapSet.member?(covered, {x, y, :left}) || MapSet.member?(covered, {x, y, :right})
   end
 
   defp check_loop(
