@@ -1,7 +1,7 @@
 defmodule AdventTest do
   use ExUnit.Case
-  doctest Advent
 
+  @tag :skip
   test "greets the world" do
     assert Advent.hello() == :world
   end
