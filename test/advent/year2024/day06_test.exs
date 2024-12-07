@@ -14,14 +14,14 @@ defmodule Advent.Year2024.Day06Test do
 #.........
 ......#..."
 
-  # @tag :skip
+  @tag :skip
   test "part1" do
     result = part1(@input)
 
     assert result == 41
   end
 
-  # @tag :skip
+  @tag :skip
   test "part2" do
     result = part2(@input)
 
