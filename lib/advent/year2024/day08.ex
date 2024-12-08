@@ -53,11 +53,7 @@ defmodule Advent.Year2024.Day08 do
           i1 < i2 do
         antinodes1 = find_antinodes(loc1, loc2, height, width, single_antinode?)
         antinodes2 = find_antinodes(loc2, loc1, height, width, single_antinode?)
-        antinodes = Enum.flat_map([antinodes1, antinodes2], & &1)
-
-        if single_antinode?,
-          do: antinodes,
-          else: [loc1, loc2 | antinodes]
+        Enum.flat_map([antinodes1, antinodes2], & &1)
       end
       |> Enum.flat_map(& &1)
     end
@@ -78,7 +74,7 @@ defmodule Advent.Year2024.Day08 do
         do: [{ar, ac}],
         else: []
     else
-      Stream.iterate(1, &(&1 + 1))
+      Stream.iterate(0, &(&1 + 1))
       |> Enum.reduce_while([], fn m, acc ->
         m_delta_r = m * delta_r
         m_delta_c = m * delta_c
