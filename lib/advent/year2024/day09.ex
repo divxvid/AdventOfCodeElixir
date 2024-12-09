@@ -44,25 +44,19 @@ defmodule Advent.Year2024.Day09 do
       %Disk{blocks: compacted_blocks, total_files: disk.total_files, total_blocks: total_blocks}
     end
 
-    defp compact(
-           [{:file, file_id_left, _, _} | _],
-           [{:file, file_id_right, _, _} | _]
-         )
-         when file_id_left > file_id_right,
-         do: []
-
-    defp compact(
-           [{:file, file_id_left, _, _} | _],
-           [{:file, file_id_right, fstart, fsize} | _]
-         )
-         when file_id_left == file_id_right,
-         do: [{:file, file_id_left, fstart, fsize}]
+    defp compact([], _), do: []
+    defp compact(_, []), do: []
+    defp compact([{:file, a, b, c} | rest], other), do: [{:file, a, b, c} | compact(rest, other)]
+    defp compact(other, [{:space, _, _} | rest]), do: compact(other, rest)
 
     defp compact(
            [{:space, space_start, space_size} | rest_spaces],
            [{:file, file_id, file_start, file_size} | rest_files]
          ) do
       cond do
+        space_size == file_size ->
+          [{:file, file_id, space_start, file_size} | compact(rest_spaces, rest_files)]
+
         space_size > file_size ->
           spaces = [{:space, space_start + file_size, space_size - file_size} | rest_spaces]
           [{:file, file_id, space_start, file_size} | compact(spaces, rest_files)]
@@ -70,21 +64,15 @@ defmodule Advent.Year2024.Day09 do
         space_size < file_size ->
           files = [{:file, file_id, file_start, file_size - space_size} | rest_files]
           [{:file, file_id, space_start, space_size} | compact(rest_spaces, files)]
-
-        space_size == file_size ->
-          [{:file, file_id, space_start, file_size} | compact(rest_spaces, rest_files)]
       end
     end
-
-    defp compact([{:file, id, a, b} | rest], other),
-      do: [{:file, id, a, b} | compact(rest, other)]
-
-    defp compact(other, [{:space, _, _} | rest]), do: compact(other, rest)
   end
 
   def part1(args) do
     disk = Disk.parse(args)
     compacted_disk = Disk.compactify(disk)
+
+    IO.inspect(compacted_disk)
 
     # [{:space, _, space_size}] =
     #   compacted_disk.blocks
