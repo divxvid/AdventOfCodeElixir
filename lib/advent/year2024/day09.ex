@@ -89,78 +89,93 @@ defmodule Advent.Year2024.Day09 do
           [{:file, file_id, space_start, space_size} | compact(rest_spaces, files)]
       end
     end
+
+    def compactifyv2(%Disk{} = disk) do
+      blocks = compactv2(disk.blocks, Enum.reverse(disk.blocks))
+      %Disk{disk | blocks: blocks}
+    end
+
+    defp compactv2(blocks, []), do: blocks
+
+    defp compactv2(blocks, [{:space, _, _} | rest]) do
+      compactv2(blocks, rest)
+    end
+
+    defp compactv2(blocks, [{:file, id, start, size} | rest]) do
+      {blocks, _} =
+        for block <- blocks, reduce: {[], false} do
+          {acc, found?} ->
+            if found? do
+              {[block | acc], true}
+            else
+              case block do
+                {:file, _, _, _} = f ->
+                  {[f | acc], found?}
+
+                {:space, space_start, space_size} = s ->
+                  cond do
+                    space_start > start ->
+                      {[s | acc], found?}
+
+                    space_size < size ->
+                      {[s | acc], found?}
+
+                    space_size == size ->
+                      {[{:file, id, space_start, size} | acc], true}
+
+                    space_size > size ->
+                      {[
+                         {:space, space_start + size, space_size - size},
+                         {:file, id, space_start, size}
+                         | acc
+                       ], true}
+                  end
+              end
+            end
+        end
+
+      blocks = Enum.reverse(blocks)
+      compactv2(blocks, rest)
+    end
   end
 
   def part1(args) do
-    disk = Disk.parse(args)
-    compacted_disk = Disk.compactify(disk)
-
-    # IO.inspect(compacted_disk)
-
-    # [{:space, _, space_size}] =
-    #   compacted_disk.blocks
-    #   |> Enum.filter(fn
-    #     {:space, _, _} -> true
-    #     {:file, _, _, _} -> false
-    #   end)
-    #   |> IO.inspect()
-    #
-    # space_after = space_size
-    #
-    # space_before =
-    #   disk.blocks
-    #   |> Enum.filter(fn
-    #     {:space, _, _} -> true
-    #     {:file, _, _, _} -> false
-    #   end)
-    #   |> Enum.map(fn {:space, _, sz} -> sz end)
-    #   |> Enum.sum()
-    #
-    # IO.inspect({space_before, space_after}, label: "testing equality")
-    #
-    # original =
-    #   disk.blocks
-    #   |> Enum.filter(fn
-    #     {:space, _, _} -> false
-    #     {:file, _, _, _} -> true
-    #   end)
-    #   |> Enum.reduce(%{}, fn {:file, id, _, sz}, acc ->
-    #     Map.update(acc, id, sz, fn old -> old + sz end)
-    #   end)
-    #
-    # new =
-    #   compacted_disk.blocks
-    #   |> Enum.filter(fn
-    #     {:space, _, _} -> false
-    #     {:file, _, _, _} -> true
-    #   end)
-    #   |> Enum.reduce(%{}, fn {:file, id, _, sz}, acc ->
-    #     Map.update(acc, id, sz, fn old -> old + sz end)
-    #   end)
-    #
-    # discrepencies =
-    #   for {id, sz} <- original do
-    #     nsz = Map.get(new, id)
-    #     if nsz != sz, do: {id, sz, nsz}, else: nil
-    #   end
-    #   |> Enum.filter(& &1)
-    #
-    # IO.inspect(discrepencies, label: "discrepencies")
-
-    compacted_disk.blocks
-    |> Enum.filter(fn block ->
-      case block do
-        {:file, _, _, _} -> true
-        _ -> false
-      end
-    end)
-    |> Enum.map(fn {:file, file_id, start, size} ->
-      size * file_id * start + file_id * div(size * (size - 1), 2)
-    end)
-    |> Enum.sum()
+    args
+    |> Disk.parse()
+    |> Disk.compactify()
+    |> checksum()
   end
 
   def part2(args) do
-    args
+    Disk.parse(args)
+    |> Disk.compactifyv2()
+    |> checksumv2()
+  end
+
+  defp checksumv2(%Disk{} = disk) do
+    {_, ans} =
+      for {:file, file_id, start, size} <- disk.blocks, reduce: {MapSet.new(), 0} do
+        {seen, total} ->
+          if MapSet.member?(seen, file_id) do
+            {seen, total}
+          else
+            value = size * file_id * start + file_id * div(size * (size - 1), 2)
+            {MapSet.put(seen, file_id), total + value}
+          end
+      end
+
+    ans
+  end
+
+  defp checksum(%Disk{} = disk) do
+    disk.blocks
+    |> Enum.map(fn
+      {:file, file_id, start, size} ->
+        size * file_id * start + file_id * div(size * (size - 1), 2)
+
+      {:space, _, _} ->
+        0
+    end)
+    |> Enum.sum()
   end
 end
