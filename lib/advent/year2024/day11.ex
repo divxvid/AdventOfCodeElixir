@@ -14,20 +14,6 @@ defmodule Advent.Year2024.Day11 do
     ans
   end
 
-  defp split(_, 0, memo), do: {1, memo}
-
-  defp split(0, n, memo) do
-    case Map.fetch(memo, {0, n}) do
-      {:ok, x} ->
-        {x, memo}
-
-      :error ->
-        {value, memo} = split(1, n - 1, memo)
-        memo = Map.put(memo, {0, n}, value)
-        {value, memo}
-    end
-  end
-
   defp split(x, n, memo) do
     case Map.fetch(memo, {x, n}) do
       {:ok, x} ->
@@ -36,20 +22,26 @@ defmodule Advent.Year2024.Day11 do
       :error ->
         n_digits = num_length(x)
 
-        case rem(n_digits, 2) do
-          0 ->
-            {left, right} = split_number(x, n_digits)
-            {left_value, memo} = split(left, n - 1, memo)
-            {right_value, memo} = split(right, n - 1, memo)
-            total = left_value + right_value
-            memo = Map.put(memo, {x, n}, total)
-            {total, memo}
+        {value, memo} =
+          cond do
+            n == 0 ->
+              {1, memo}
 
-          _ ->
-            {value, memo} = split(x * 2024, n - 1, memo)
-            memo = Map.put(memo, {x, n}, value)
-            {value, memo}
-        end
+            x == 0 ->
+              split(1, n - 1, memo)
+
+            rem(n_digits, 2) == 0 ->
+              {left, right} = split_number(x, n_digits)
+              {left_value, memo} = split(left, n - 1, memo)
+              {right_value, memo} = split(right, n - 1, memo)
+              {left_value + right_value, memo}
+
+            true ->
+              split(x * 2024, n - 1, memo)
+          end
+
+        memo = Map.put(memo, {x, n}, value)
+        {value, memo}
     end
   end
 
