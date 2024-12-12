@@ -27,4 +27,17 @@ MMMISSJEEE"
 
     assert result == 1206
   end
+
+  # @tag :skip
+  test "part2 extra case1" do
+    input = "AAAAAA
+AAABBA
+AAABBA
+ABBAAA
+ABBAAA
+AAAAAA"
+    result = part2(input)
+
+    assert result == 368
+  end
 end
