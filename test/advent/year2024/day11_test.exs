@@ -3,7 +3,7 @@ defmodule Advent.Year2024.Day11Test do
 
   import Elixir.Advent.Year2024.Day11
 
-  # @tag :skip
+  @tag :skip
   test "part1" do
     input = "125 17"
     result = part1(input)
