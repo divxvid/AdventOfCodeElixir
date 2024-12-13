@@ -14,21 +14,21 @@ MIIIIIJJEE
 MIIISIJEEE
 MMMISSJEEE"
 
-  # @tag :skip
+  @tag :skip
   test "part1" do
     result = part1(@input)
 
     assert result == 1930
   end
 
-  # @tag :skip
+  @tag :skip
   test "part2" do
     result = part2(@input)
 
     assert result == 1206
   end
 
-  # @tag :skip
+  @tag :skip
   test "part2 extra case1" do
     input = "AAAAAA
 AAABBA
