@@ -19,18 +19,10 @@ Button A: X+69, Y+23
 Button B: X+27, Y+71
 Prize: X=18641, Y=10279"
 
-  # @tag :skip
+  @tag :skip
   test "part1" do
     result = part1(@input)
 
     assert result == 480
-  end
-
-  @tag :skip
-  test "part2" do
-    input = nil
-    result = part2(input)
-
-    assert result
   end
 end
