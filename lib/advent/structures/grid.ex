@@ -45,6 +45,17 @@ defmodule Advent.Structures.Grid do
     end
   end
 
+  def update(%Grid{} = grid, row, column, value) do
+    cond do
+      row < 1 || row > grid.n_rows || column < 1 || column > grid.n_cols ->
+        {:error, "Invalid Index: {#{row},#{column}}"}
+
+      true ->
+        elements = Map.put(grid.elements, {row, column}, value)
+        {:ok, Map.put(grid, :elements, elements)}
+    end
+  end
+
   def traverse4_indexes(%Grid{n_rows: n_rows, n_cols: n_cols} = _, row, column) do
     for {dx, dy} <- Stream.zip(@dx4, @dy4), reduce: [] do
       acc ->
