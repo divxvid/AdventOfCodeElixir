@@ -45,6 +45,10 @@ defmodule Advent.Structures.Grid do
     end
   end
 
+  def get!(%Grid{elements: elements}, row, column) do
+    Map.fetch!(elements, {row, column})
+  end
+
   def update(%Grid{} = grid, row, column, value) do
     cond do
       row < 1 || row > grid.n_rows || column < 1 || column > grid.n_cols ->
@@ -54,6 +58,11 @@ defmodule Advent.Structures.Grid do
         elements = Map.put(grid.elements, {row, column}, value)
         {:ok, Map.put(grid, :elements, elements)}
     end
+  end
+
+  def update!(%Grid{elements: elements} = grid, row, column, value) do
+    elements = Map.update!(elements, {row, column}, fn _old -> value end)
+    Map.put(grid, :elements, elements)
   end
 
   def traverse4_indexes(%Grid{n_rows: n_rows, n_cols: n_cols} = _, row, column) do
