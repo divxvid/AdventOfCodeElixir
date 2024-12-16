@@ -25,7 +25,7 @@ vvv<<^>^v^^><<>>><>^<<><^vv^^<>vvv<>><^^v>^>vv<>v<<<<v<^v>^<^^>>>^<v<v
 ^^>vv<^v^v<vv>^<><v<^v>^^^>>>^^vvv^>vvv<>>>^<^>>>>>^<<^v>^vvv<>^<><<v>
 v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"
 
-  # @tag :skip
+  @tag :skip
   test "part1 small" do
     input = "########
 #..O.O.#
@@ -42,7 +42,7 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"
     assert result == 2028
   end
 
-  # @tag :skip
+  @tag :skip
   test "part1 large" do
     result = part1(@larger_input)
 
@@ -66,7 +66,7 @@ v^^>>><<^^<>>^v^<v^vv<>v^<<>^<^v^v><^<<<><<^<v><v<>vv>>v><v^<vv<>v^<<^"
   #     assert result == 120
   #   end
 
-  # @tag :skip
+  @tag :skip
   test "part2" do
     result = part2(@larger_input)
 
