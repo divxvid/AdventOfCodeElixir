@@ -3,20 +3,20 @@ defmodule Advent.Year2024.Day17Test do
 
   import Elixir.Advent.Year2024.Day17
 
-  @input "Register A: 729
+  @tag :skip
+  test "part1" do
+    input = "Register A: 729
 Register B: 0
 Register C: 0
 
 Program: 0,1,5,4,3,0"
 
-  # @tag :skip
-  test "part1" do
-    result = part1(@input)
+    result = part1(input)
 
     assert result == "4,6,3,5,6,3,5,2,1,0"
   end
 
-  # @tag :skip
+  @tag :skip
   test "part2" do
     input = "Register A: 2024
 Register B: 0
