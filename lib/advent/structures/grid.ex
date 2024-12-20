@@ -65,6 +65,17 @@ defmodule Advent.Structures.Grid do
     Map.put(grid, :elements, elements)
   end
 
+  def find(%Grid{elements: elements}, values) when is_list(values) do
+    elements
+    |> Enum.reduce(Map.new(), fn {k, v}, positions ->
+      if v in values do
+        Map.update(positions, v, [k], fn old -> [k | old] end)
+      else
+        positions
+      end
+    end)
+  end
+
   def traverse4_indexes(%Grid{n_rows: n_rows, n_cols: n_cols} = _, row, column) do
     for {dx, dy} <- Stream.zip(@dx4, @dy4), reduce: [] do
       acc ->

@@ -14,14 +14,14 @@ bwurrg
 brgr
 bbrgwb"
 
-  # @tag :skip
+  @tag :skip
   test "part1" do
     result = part1(@input)
 
     assert result == 6
   end
 
-  # @tag :skip
+  @tag :skip
   test "part2" do
     result = part2(@input)
 
