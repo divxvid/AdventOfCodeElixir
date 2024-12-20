@@ -1,28 +1,16 @@
 defmodule Advent.Year2024.Day20 do
   alias Advent.Structures.Grid
 
-  def part1(args) do
+  def part1(args), do: solve(args, 2)
+  def part2(args), do: solve(args, 20)
+
+  defp solve(args, tolerance) do
     grid = Grid.new(args)
     %{"S" => [{start_r, start_c}], "E" => [{end_r, end_c}]} = Grid.find(grid, ["S", "E"])
 
     # find the distances from end to start and store it in a map
     distances = distance(grid, end_r, end_c, 0, Map.new())
-    shortcuts = find_distances_with_shortcuts(grid, start_r, start_c, 0, distances, [], 2)
-
-    actual_dist = Map.get(distances, {start_r, start_c})
-
-    shortcuts
-    |> Enum.filter(fn {_, _, d} -> actual_dist - d >= 100 end)
-    |> Enum.count()
-  end
-
-  def part2(args) do
-    grid = Grid.new(args)
-    %{"S" => [{start_r, start_c}], "E" => [{end_r, end_c}]} = Grid.find(grid, ["S", "E"])
-
-    # find the distances from end to start and store it in a map
-    distances = distance(grid, end_r, end_c, 0, Map.new())
-    shortcuts = find_distances_with_shortcuts(grid, start_r, start_c, 0, distances, [], 20)
+    shortcuts = find_distances_with_shortcuts(grid, start_r, start_c, 0, distances, [], tolerance)
 
     actual_dist = Map.get(distances, {start_r, start_c})
 
