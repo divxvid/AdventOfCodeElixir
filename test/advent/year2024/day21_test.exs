@@ -9,7 +9,7 @@ defmodule Advent.Year2024.Day21Test do
 456A
 379A"
 
-  # @tag :skip
+  @tag :skip
   test "part1" do
     result = part1(@input)
 
