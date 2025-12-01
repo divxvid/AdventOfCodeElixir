@@ -3,9 +3,7 @@ defmodule Advent.Year2025.Day01Test do
 
   import Elixir.Advent.Year2025.Day01
 
-  # @tag :skip
-  test "part1" do
-    input = "L68
+  @input "L68
 L30
 R48
 L5
@@ -15,16 +13,18 @@ L1
 L99
 R14
 L82"
-    result = part1(input)
+
+  @tag :skip
+  test "part1" do
+    result = part1(@input)
 
     assert result == 3
   end
 
   @tag :skip
   test "part2" do
-    input = nil
-    result = part2(input)
+    result = part2(@input)
 
-    assert result
+    assert result == 6
   end
 end
