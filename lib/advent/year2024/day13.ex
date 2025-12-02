@@ -37,7 +37,7 @@ defmodule Advent.Year2024.Day13 do
   def part2(args) do
     args
     |> parse_input()
-    |> Enum.map(fn machine ->
+    |> Enum.map(fn %Machine{} = machine ->
       machine = %Machine{machine | px: machine.px + @addition}
       machine = %Machine{machine | py: machine.py + @addition}
       machine
