@@ -50,6 +50,10 @@ defmodule Advent.Year2025.Day02 do
   # end
 
   @doc """
+  Performance report for parallelized implementation:
+  Name             ips        average  deviation         median         99th %
+  part_2         15.35       65.13 ms     5.90%       64.42 ms       77.40 ms
+
   Performance Report for current implementation:
   Name             ips        average  deviation         median         99th %
   part_2          4.48      223.21 ms     ±1.56%      221.95 ms      231.97 ms
@@ -60,14 +64,17 @@ defmodule Advent.Year2025.Day02 do
   """
   def part2(args) do
     parse(args)
-    |> Stream.map(fn {low, high} ->
-      low..high
-      |> Stream.map(fn id ->
-        if repeats?(Integer.digits(id)),
-          do: id,
-          else: 0
-      end)
-      |> Enum.sum()
+    |> Enum.map(&Task.async(fn -> execute_task(&1) end))
+    |> Enum.map(&Task.await/1)
+    |> Enum.sum()
+  end
+
+  defp execute_task({low, high}) do
+    low..high
+    |> Stream.map(fn id ->
+      if repeats?(Integer.digits(id)),
+        do: id,
+        else: 0
     end)
     |> Enum.sum()
   end
