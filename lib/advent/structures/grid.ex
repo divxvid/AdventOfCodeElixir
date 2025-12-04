@@ -5,6 +5,8 @@ defmodule Advent.Structures.Grid do
 
   @dx4 [-1, 1, 0, 0]
   @dy4 [0, 0, -1, 1]
+  @dx8 [-1, -1, -1, 0, 0, 1, 1, 1]
+  @dy8 [-1, 0, 1, -1, 1, -1, 0, 1]
 
   def new(input, opts \\ []) do
     row_delimiter = Keyword.get(opts, :row_delimiter, "\n")
@@ -78,6 +80,19 @@ defmodule Advent.Structures.Grid do
 
   def traverse4_indexes(%Grid{n_rows: n_rows, n_cols: n_cols} = _, row, column) do
     for {dx, dy} <- Stream.zip(@dx4, @dy4), reduce: [] do
+      acc ->
+        x = row + dx
+        y = column + dy
+
+        cond do
+          x < 1 || x > n_rows || y < 1 || y > n_cols -> acc
+          true -> [{x, y} | acc]
+        end
+    end
+  end
+
+  def traverse8_indexes(%Grid{n_rows: n_rows, n_cols: n_cols} = _, row, column) do
+    for {dx, dy} <- Stream.zip(@dx8, @dy8), reduce: [] do
       acc ->
         x = row + dx
         y = column + dy
