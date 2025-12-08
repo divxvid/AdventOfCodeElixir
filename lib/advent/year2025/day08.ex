@@ -45,7 +45,7 @@ defmodule Advent.Year2025.Day08 do
 
     distances =
       junction_boxes
-      |> find_distances()
+      |> find_distances([])
       |> Enum.sort_by(fn {distance, _, _} -> distance end)
       |> Enum.take(connection_limit)
 
@@ -82,7 +82,7 @@ defmodule Advent.Year2025.Day08 do
 
     distances =
       junction_boxes
-      |> find_distances()
+      |> find_distances([])
       |> Enum.sort_by(fn {distance, _, _} -> distance end)
 
     {jb_map, {jb1, jb2}} =
@@ -102,16 +102,18 @@ defmodule Advent.Year2025.Day08 do
     x1 * x2
   end
 
-  defp find_distances([%JunctionBox{} = jb | rest]) do
+  defp find_distances([%JunctionBox{} = jb | rest], distances) do
     distances =
       Stream.cycle([jb])
       |> Stream.zip(rest)
-      |> Enum.map(fn {jb1, jb2} -> {JunctionBox.distance(jb1, jb2), jb1.id, jb2.id} end)
+      |> Enum.reduce(distances, fn {jb1, jb2}, distances ->
+        [{JunctionBox.distance(jb1, jb2), jb1.id, jb2.id} | distances]
+      end)
 
-    [distances | find_distances(rest)] |> List.flatten()
+    find_distances(rest, distances)
   end
 
-  defp find_distances(_), do: []
+  defp find_distances(_, acc), do: acc
 
   defp connect_junction_box(jb_map, jb_id1, jb_id2) do
     leader1_id = find_leader(jb_map, jb_id1)
