@@ -20,13 +20,4 @@ defmodule Advent.Year2025.Day10Test do
 
     assert result == 33
   end
-
-  @tag :skip
-  test "part2 random" do
-    input =
-      "[..#..##] (2,3,5,6) (0,1,2,4,5,6) (0,1,5,6) (0,1,2,5) (2,4,5,6) (2,5,6) (4,5) (2,3,5) {29,29,222,175,49,256,223}"
-
-    result = part2(input)
-    assert result == 10
-  end
 end

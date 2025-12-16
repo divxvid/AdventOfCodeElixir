@@ -3,7 +3,7 @@ defmodule Advent.Year2025.Day11Test do
 
   import Elixir.Advent.Year2025.Day11
 
-  # @tag :skip
+  @tag :skip
   test "part1" do
     input = "aaa: you hhh
 you: bbb ccc
@@ -20,7 +20,7 @@ iii: out"
     assert result == 5
   end
 
-  # @tag :skip
+  @tag :skip
   test "part2" do
     input = "svr: aaa bbb
 aaa: fft

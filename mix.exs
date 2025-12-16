@@ -21,6 +21,7 @@ defmodule Advent.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:dantzig, github: "Pascal736/dantzig", branch: "add-variable-type-support"},
       {:nimble_parsec, "~> 1.4"},
       {:igniter, "~> 0.3"},
       {:tz, "~> 0.28"},
